@@ -1,6 +1,6 @@
 namespace CustomerPortal.Application.Responses;
 
-public record CustomerBody(
+public record CustomerData(
     int Id,
     string Surname,
     string Forename,
@@ -8,4 +8,11 @@ public record CustomerBody(
     string Address
 );
 
-public record CustomerResponse(int Code, CustomerBody? Body, Error? Error);
+public enum Status
+{
+    Success,
+    ValidationFailed,
+    NotFound,
+}
+
+public record CustomerResponse(Status Status, List<CustomerData> Customers, Error? Error);

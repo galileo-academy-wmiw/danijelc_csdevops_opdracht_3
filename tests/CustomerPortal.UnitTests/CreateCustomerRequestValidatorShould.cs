@@ -3,20 +3,20 @@ using CustomerPortal.Application.Validators;
 
 namespace CustomerPortal.UnitTests;
 
-public class CustomerService_CreateCustomerShould
+public class CreateCustomerRequestValidatorShould
 {
     [Theory]
     [InlineData("", "", "")]
     [InlineData("  ", "   ", "   ")]
     [InlineData("John", "", "")]
     [InlineData("John", "Smith", " ")]
-    public void CreateCustomer_SurnameForenameAddress_EmptyOrWhiteSpaces_ReturnsFalse(
+    public void Validator_SurnameForenameAddress_EmptyOrWhiteSpaces_ReturnsFalse(
         string surname,
         string forename,
         string address
     )
     {
-        // Assign
+        // Arrange
         var request = new CreateCustomerRequest(surname, forename, address);
         var validator = new CreateCustomerRequestValidator();
 
@@ -28,8 +28,9 @@ public class CustomerService_CreateCustomerShould
     }
 
     [Fact]
-    public void CreateCustomer_SurnameForenameAddressNotEmptyStringOrWhiteSpace_ReturnsTrue()
+    public void Validator_SurnameForenameAddressNotEmptyStringOrWhiteSpace_ReturnsTrue()
     {
+        // Arrange
         var request = new CreateCustomerRequest("Bond", "James", "Top Secret!");
         var validator = new CreateCustomerRequestValidator();
 

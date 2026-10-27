@@ -1,5 +1,6 @@
 using CustomerPortal.Application.Repositories;
 using CustomerPortal.Application.Requests;
+using CustomerPortal.Application.Responses;
 using CustomerPortal.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddSingleton<ICustomerRepository, InMemoryCustomerRepository>();
 
 var app = builder.Build();
 
@@ -20,29 +22,41 @@ app.UseHttpsRedirection();
 
 app.MapGet(
     "/customers/{id:int}",
-    (int id) =>
+    (int id, ICustomerRepository repository) =>
     {
-        var customerService = new CustomerService(new InMemoryCustomerRepository());
+        var customerService = new CustomerService(repository);
         var customerResponse = customerService.GetCustomer(id);
-        if (customerResponse is null)
+        if (customerResponse.Status is Status.NotFound)
         {
             return Results.NotFound();
         }
-        return Results.Ok(customerResponse);
+        return Results.Json(customerResponse.Customers);
     }
 );
 
+app.MapGet(
+    "/customers",
+    (ICustomerRepository repository) =>
+    {
+        var customerService = new CustomerService(repository);
+        var customerResponse = customerService.GetAll();
+        return Results.Json(customerResponse.Customers);
+    }
+);
 app.MapPost(
     "/customers",
-    (CreateCustomerRequest request) =>
+    (CreateCustomerRequest request, ICustomerRepository repository) =>
     {
-        var customerService = new CustomerService(new InMemoryCustomerRepository());
+        var customerService = new CustomerService(repository);
         var customerResponse = customerService.CreateCustomer(request);
-        if (customerResponse.Error is not null)
+        if (customerResponse.Status is Status.ValidationFailed)
         {
-            return Results.BadRequest(customerResponse);
+            return Results.BadRequest(customerResponse.Error);
         }
-        return Results.Ok(customerResponse);
+        return Results.Created(
+            $"/customers/{customerResponse.Customers[0].Id}",
+            customerResponse.Customers
+        );
     }
 );
 

@@ -1,4 +1,3 @@
-using CustomerPortal.Application.Requests;
 using CustomerPortal.Domain;
 
 namespace CustomerPortal.Application.Repositories;
@@ -6,6 +5,11 @@ namespace CustomerPortal.Application.Repositories;
 public class InMemoryCustomerRepository : ICustomerRepository
 {
     private readonly List<Customer> customers = [];
+
+    public IReadOnlyList<Customer> GetAll()
+    {
+        return customers.AsReadOnly();
+    }
 
     public Customer? Get(int id)
     {
@@ -16,10 +20,8 @@ public class InMemoryCustomerRepository : ICustomerRepository
         return customers.FirstOrDefault(customer => customer.Id == id);
     }
 
-    public Customer Save(CreateCustomerRequest newCustomer)
+    public void Save(Customer customer)
     {
-        var customer = new Customer(newCustomer.Surname, newCustomer.Forename, newCustomer.Address);
         customers.Add(customer);
-        return customer;
     }
 }

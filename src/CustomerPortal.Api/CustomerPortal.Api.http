@@ -1,9 +1,21 @@
 @CustomerPortal.Api_HostAddress = http://localhost:5158
 
-GET {{CustomerPortal.Api_HostAddress}}/customers/{id}/
+POST {{CustomerPortal.Api_HostAddress}}/customers
+Content-Type: application/json
 Accept: application/json
 
-POST {{CustomerPortal.Api_HostAddress}}/customers/
+{
+    "surname": "Bill",
+    "forename": "McNeal",
+    "address": "Can't recall"
+}
+
+###
+
+GET {{CustomerPortal.Api_HostAddress}}/customers/1
 Accept: application/json
 
 ###
+
+GET {{CustomerPortal.Api_HostAddress}}/customers
+
