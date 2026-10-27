@@ -7,8 +7,8 @@ public class CreateCustomerRequestValidator : AbstractValidator<CreateCustomerRe
 {
     public CreateCustomerRequestValidator()
     {
-        RuleFor(request => request.Surname.Trim()).NotEmpty();
-        RuleFor(request => request.Forename.Trim()).NotEmpty();
-        RuleFor(request => request.Address.Trim()).NotEmpty();
+        RuleFor(request => request.Surname).NotNull().NotEmpty();
+        RuleFor(request => request.Forename).NotNull().NotEmpty();
+        RuleFor(request => request.Address).NotNull().NotEmpty();
     }
 }

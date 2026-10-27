@@ -2,7 +2,6 @@
 using CustomerPortal.Application.Requests;
 using CustomerPortal.Application.Responses;
 using CustomerPortal.Application.Validators;
-using CustomerPortal.Domain;
 
 namespace CustomerPortal.Application.Services;
 
@@ -17,15 +16,19 @@ public class CustomerService(ICustomerRepository repository)
         }
 
         return new CustomerResponse(
-            customer.Id,
-            customer.Surname,
-            customer.Forename,
-            customer.Discount,
-            customer.Address
+            200,
+            new CustomerBody(
+                customer.Id,
+                customer.Surname,
+                customer.Forename,
+                customer.Discount,
+                customer.Address
+            ),
+            null
         );
     }
 
-    public CustomerResponse? CreateCustomer(CreateCustomerRequest request)
+    public CustomerResponse CreateCustomer(CreateCustomerRequest request)
     {
         // validate request
         var createCustomerRequestValidator = new CreateCustomerRequestValidator();
@@ -33,17 +36,21 @@ public class CustomerService(ICustomerRepository repository)
 
         if (!result.IsValid)
         {
-            return null;
+            return new CustomerResponse(400, null, new Error(result.ToString()));
         }
 
         // save new customer
         var customer = repository.Save(request);
         return new CustomerResponse(
-            customer.Id,
-            customer.Surname,
-            customer.Forename,
-            customer.Discount,
-            customer.Address
+            200,
+            new CustomerBody(
+                customer.Id,
+                customer.Surname,
+                customer.Forename,
+                customer.Discount,
+                customer.Address
+            ),
+            null
         );
     }
 }

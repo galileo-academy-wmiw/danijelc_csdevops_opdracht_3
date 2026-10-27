@@ -3,4 +3,7 @@
 GET {{CustomerPortal.Api_HostAddress}}/customers/{id}/
 Accept: application/json
 
+POST {{CustomerPortal.Api_HostAddress}}/customers/
+Accept: application/json
+
 ###

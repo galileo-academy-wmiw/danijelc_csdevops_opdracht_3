@@ -1,4 +1,5 @@
 using CustomerPortal.Application.Repositories;
+using CustomerPortal.Application.Requests;
 using CustomerPortal.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,21 @@ app.MapGet(
         Console.WriteLine(id);
         var customerService = new CustomerService(new InMemoryCustomerRepository());
         var customerResponse = customerService.GetCustomer(id);
+        if (customerResponse is null)
+        {
+            Results.StatusCode(404);
+        }
+        return customerResponse;
+    }
+);
+
+app.MapPost(
+    "/customers",
+    (CreateCustomerRequest request) =>
+    {
+        var customerService = new CustomerService(new InMemoryCustomerRepository());
+        var customerResponse = customerService.CreateCustomer(request);
+        Results.StatusCode(customerResponse.Code);
         return customerResponse;
     }
 );
