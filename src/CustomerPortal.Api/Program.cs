@@ -1,3 +1,6 @@
+using CustomerPortal.Application.Repositories;
+using CustomerPortal.Application.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,6 +17,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/weatherforecast", () => { }).WithName("GetWeatherForecast");
+app.MapGet(
+    "/customers/{id:int}",
+    (int id) =>
+    {
+        var customerService = new CustomerService(new InMemoryCustomerRepository());
+        var customerResponse = customerService.GetCustomer(id);
+        return customerResponse;
+    }
+);
 
 app.Run();

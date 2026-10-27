@@ -1,11 +1,12 @@
 ﻿namespace CustomerPortal.Domain;
 
-public class Customer(Guid id, string surname, string forename, decimal discount, string address)
+public class Customer(string surname, string forename, decimal discount, string address)
 {
-    public Customer(string surname, string forename, decimal discount, string address)
-        : this(Guid.NewGuid(), surname, forename, discount, address) { }
+    public Customer(string surname, string forename, string address)
+        : this(surname, forename, 0m, address) { }
 
-    public Guid Id { get; } = id;
+    private static int _nextId = 1;
+    public int Id { get; } = _nextId++;
     public string Surname { get; set; } = Validate(surname, nameof(surname));
     public string Forename { get; set; } = Validate(forename, nameof(forename));
     public decimal Discount { get; private set; } =
