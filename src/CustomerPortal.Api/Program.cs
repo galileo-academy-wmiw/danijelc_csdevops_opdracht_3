@@ -22,14 +22,13 @@ app.MapGet(
     "/customers/{id:int}",
     (int id) =>
     {
-        Console.WriteLine(id);
         var customerService = new CustomerService(new InMemoryCustomerRepository());
         var customerResponse = customerService.GetCustomer(id);
         if (customerResponse is null)
         {
-            Results.StatusCode(404);
+            return Results.NotFound();
         }
-        return customerResponse;
+        return Results.Ok(customerResponse);
     }
 );
 
@@ -39,8 +38,11 @@ app.MapPost(
     {
         var customerService = new CustomerService(new InMemoryCustomerRepository());
         var customerResponse = customerService.CreateCustomer(request);
-        Results.StatusCode(customerResponse.Code);
-        return customerResponse;
+        if (customerResponse.Error is not null)
+        {
+            return Results.BadRequest(customerResponse);
+        }
+        return Results.Ok(customerResponse);
     }
 );
 
