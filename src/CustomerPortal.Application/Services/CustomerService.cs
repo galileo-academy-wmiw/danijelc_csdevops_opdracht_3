@@ -14,6 +14,7 @@ public class CustomerService(ICustomerRepository repository)
         }
 
         return new CustomerResponse(
+            customer.Id,
             customer.Surname,
             customer.Forename,
             customer.Discount,

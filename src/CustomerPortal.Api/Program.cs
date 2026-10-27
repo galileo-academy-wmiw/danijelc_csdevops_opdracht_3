@@ -21,6 +21,7 @@ app.MapGet(
     "/customers/{id:int}",
     (int id) =>
     {
+        Console.WriteLine(id);
         var customerService = new CustomerService(new InMemoryCustomerRepository());
         var customerResponse = customerService.GetCustomer(id);
         return customerResponse;
