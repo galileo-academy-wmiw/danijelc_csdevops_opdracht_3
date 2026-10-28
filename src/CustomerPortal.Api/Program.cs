@@ -32,7 +32,7 @@ app.MapGet(
         {
             return Results.NotFound();
         }
-        return Results.Json(customerResponse.Customers);
+        return Results.Json(customerResponse.Customers[0]);
     }
 );
 
