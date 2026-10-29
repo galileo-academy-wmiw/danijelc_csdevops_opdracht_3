@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<ICustomerRepository, InMemoryCustomerRepository>();
-builder.Services.AddSingleton<CustomerService>();
+builder.Services.AddScoped<CustomerService>();
 
 var app = builder.Build();
 
@@ -28,6 +28,7 @@ app.MapGet(
     (int id, CustomerService customerService) =>
     {
         var customerResponse = customerService.GetCustomer(id);
+
         if (customerResponse.Status is Status.NotFound)
         {
             return Results.NotFound();
@@ -49,10 +50,17 @@ app.MapPost(
     (CreateCustomerRequest request, CustomerService customerService) =>
     {
         var customerResponse = customerService.CreateCustomer(request);
+
         if (customerResponse.Status is Status.ValidationFailed)
         {
             return Results.BadRequest(customerResponse.Error);
         }
+
+        if (customerResponse.Status == Status.SaveFailed)
+        {
+            return Results.Conflict(customerResponse.Error);
+        }
+
         return Results.Created(
             $"/customers/{customerResponse.Customers[0].Id}",
             customerResponse.Customers[0]

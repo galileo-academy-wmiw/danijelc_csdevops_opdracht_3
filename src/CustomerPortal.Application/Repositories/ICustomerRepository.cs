@@ -6,5 +6,6 @@ public interface ICustomerRepository
 {
     IReadOnlyList<Customer> GetAll();
     Customer? Get(int id);
-    void Save(Customer customer);
+    bool Save(Customer customer);
+    int NextId();
 }

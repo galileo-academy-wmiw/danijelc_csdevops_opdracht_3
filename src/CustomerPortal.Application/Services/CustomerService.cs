@@ -8,8 +8,6 @@ namespace CustomerPortal.Application.Services;
 
 public class CustomerService(ICustomerRepository repository)
 {
-    private static int nextId = 1;
-
     public CustomerResponse GetAll()
     {
         var customers = repository.GetAll();
@@ -66,8 +64,23 @@ public class CustomerService(ICustomerRepository repository)
         }
 
         // save new customer
-        var customer = new Customer(nextId++, request.Surname, request.Forename, request.Address);
-        repository.Save(customer);
+        var customer = new Customer(
+            repository.NextId(),
+            request.Surname,
+            request.Forename,
+            request.Address
+        );
+
+        var success = repository.Save(customer);
+        if (!success)
+        {
+            return new CustomerResponse(
+                Status.SaveFailed,
+                [],
+                new Error($"Customer with id {customer.Id} already exists")
+            );
+        }
+
         return new CustomerResponse(
             Status.Success,
             [

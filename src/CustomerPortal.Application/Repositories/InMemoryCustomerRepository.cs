@@ -1,14 +1,22 @@
+using System.Collections.Concurrent;
 using CustomerPortal.Domain;
 
 namespace CustomerPortal.Application.Repositories;
 
 public class InMemoryCustomerRepository : ICustomerRepository
 {
-    private readonly List<Customer> customers = [];
+    private int _nextId = 0;
+    private readonly ConcurrentDictionary<int, Customer> customers = [];
+
+    public int NextId()
+    {
+        return Interlocked.Increment(ref _nextId);
+    }
 
     public IReadOnlyList<Customer> GetAll()
     {
-        return customers.AsReadOnly();
+        var orderedCustomers = customers.OrderBy(pair => pair.Key).Select(pair => pair.Value);
+        return [.. orderedCustomers];
     }
 
     public Customer? Get(int id)
@@ -17,11 +25,13 @@ public class InMemoryCustomerRepository : ICustomerRepository
         {
             return null;
         }
-        return customers.FirstOrDefault(customer => customer.Id == id);
+
+        customers.TryGetValue(id, out Customer? customer);
+        return customer;
     }
 
-    public void Save(Customer customer)
+    public bool Save(Customer customer)
     {
-        customers.Add(customer);
+        return customers.TryAdd(customer.Id, customer);
     }
 }
