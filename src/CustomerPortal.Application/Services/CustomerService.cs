@@ -8,7 +8,7 @@ namespace CustomerPortal.Application.Services;
 
 public class CustomerService(ICustomerRepository repository)
 {
-    public CustomerResponse GetAll()
+    public Result<IReadOnlyList<CustomerData>> GetAll()
     {
         var customers = repository.GetAll();
 
@@ -16,43 +16,23 @@ public class CustomerService(ICustomerRepository repository)
 
         foreach (var customer in customers)
         {
-            customersData.Add(
-                new CustomerData(
-                    customer.Id,
-                    customer.Surname,
-                    customer.Forename,
-                    customer.Discount,
-                    customer.Address
-                )
-            );
+            customersData.Add(new CustomerData(customer));
         }
-        return new CustomerResponse(Status.Success, customersData, null);
+        return new Result<IReadOnlyList<CustomerData>>(Status.Success, customersData, null);
     }
 
-    public CustomerResponse GetCustomer(int id)
+    public Result<CustomerData?> GetCustomer(int id)
     {
         var customer = repository.Get(id);
         if (customer is null)
         {
-            return new CustomerResponse(Status.NotFound, [], null);
+            return new Result<CustomerData?>(Status.NotFound, null, null);
         }
 
-        return new CustomerResponse(
-            Status.Success,
-            [
-                new CustomerData(
-                    customer.Id,
-                    customer.Surname,
-                    customer.Forename,
-                    customer.Discount,
-                    customer.Address
-                ),
-            ],
-            null
-        );
+        return new Result<CustomerData?>(Status.Success, new CustomerData(customer), null);
     }
 
-    public CustomerResponse CreateCustomer(CreateCustomerRequest request)
+    public Result<CustomerData?> CreateCustomer(CreateCustomerRequest request)
     {
         // validate request
         var createCustomerRequestValidator = new CreateCustomerRequestValidator();
@@ -60,7 +40,11 @@ public class CustomerService(ICustomerRepository repository)
 
         if (!result.IsValid)
         {
-            return new CustomerResponse(Status.ValidationFailed, [], new Error(result.ToString()));
+            return new Result<CustomerData?>(
+                Status.ValidationFailed,
+                null,
+                new Error(result.ToString())
+            );
         }
 
         // save new customer
@@ -74,25 +58,13 @@ public class CustomerService(ICustomerRepository repository)
         var success = repository.Save(customer);
         if (!success)
         {
-            return new CustomerResponse(
+            return new Result<CustomerData?>(
                 Status.AlreadyExists,
-                [],
+                null,
                 new Error($"Customer with id {customer.Id} already exists")
             );
         }
 
-        return new CustomerResponse(
-            Status.Success,
-            [
-                new CustomerData(
-                    customer.Id,
-                    customer.Surname,
-                    customer.Forename,
-                    customer.Discount,
-                    customer.Address
-                ),
-            ],
-            null
-        );
+        return new Result<CustomerData?>(Status.Success, new CustomerData(customer), null);
     }
 }

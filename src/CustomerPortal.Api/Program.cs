@@ -27,13 +27,13 @@ app.MapGet(
     "/customers/{id:int}",
     (int id, CustomerService customerService) =>
     {
-        var customerResponse = customerService.GetCustomer(id);
+        var response = customerService.GetCustomer(id);
 
-        if (customerResponse.Status == Status.NotFound)
+        if (response.Status == Status.NotFound)
         {
             return Results.NotFound();
         }
-        return Results.Json(customerResponse.Customers[0]);
+        return Results.Json(response.Value);
     }
 );
 
@@ -41,30 +41,28 @@ app.MapGet(
     "/customers",
     (CustomerService customerService) =>
     {
-        var customerResponse = customerService.GetAll();
-        return Results.Json(customerResponse.Customers);
+        var response = customerService.GetAll();
+        return Results.Json(response.Value);
     }
 );
+
 app.MapPost(
     "/customers",
     (CreateCustomerRequest request, CustomerService customerService) =>
     {
-        var customerResponse = customerService.CreateCustomer(request);
+        var response = customerService.CreateCustomer(request);
 
-        if (customerResponse.Status == Status.ValidationFailed)
+        if (response.Status == Status.ValidationFailed)
         {
-            return Results.BadRequest(customerResponse.Error);
+            return Results.BadRequest(response.Error);
         }
 
-        if (customerResponse.Status == Status.AlreadyExists)
+        if (response.Status == Status.AlreadyExists)
         {
-            return Results.Conflict(customerResponse.Error);
+            return Results.Conflict(response.Error);
         }
 
-        return Results.Created(
-            $"/customers/{customerResponse.Customers[0].Id}",
-            customerResponse.Customers[0]
-        );
+        return Results.Created($"/customers/{response.Value?.Id}", response.Value);
     }
 );
 

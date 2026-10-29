@@ -1,12 +1,14 @@
+using CustomerPortal.Domain;
+
 namespace CustomerPortal.Application.Responses;
 
-public record CustomerData(
-    int Id,
-    string Surname,
-    string Forename,
-    decimal Discount,
-    string Address
-);
+public record CustomerData(Customer Customer)
+{
+    public int Id = Customer.Id;
+    public string Surname = Customer.Surname;
+    public string Forename = Customer.Forename;
+    public decimal Discount = Customer.Discount;
+}
 
 public enum Status
 {
@@ -16,4 +18,4 @@ public enum Status
     AlreadyExists,
 }
 
-public record CustomerResponse(Status Status, List<CustomerData> Customers, Error? Error);
+public record Result<T>(Status Status, T Value, Error? Error);
