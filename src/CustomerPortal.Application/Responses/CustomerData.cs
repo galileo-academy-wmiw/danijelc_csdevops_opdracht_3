@@ -10,4 +10,3 @@ public class CustomerData(Customer customer)
     public decimal Discount { get; } = customer.Discount;
     public string Address { get; } = customer.Address;
 }
-

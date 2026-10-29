@@ -62,7 +62,7 @@ app.MapPost(
             return Results.Conflict(response.Error);
         }
 
-        return Results.Created($"/customers/{response.Value?.Id}", response.Value);
+        return Results.Created($"/customers/{response.Value!.Id}", response.Value);
     }
 );
 

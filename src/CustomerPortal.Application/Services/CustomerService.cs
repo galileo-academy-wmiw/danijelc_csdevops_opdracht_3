@@ -1,4 +1,4 @@
-﻿using CustomerPortal.Application.Repositories;
+using CustomerPortal.Application.Repositories;
 using CustomerPortal.Application.Requests;
 using CustomerPortal.Application.Responses;
 using CustomerPortal.Application.Validators;

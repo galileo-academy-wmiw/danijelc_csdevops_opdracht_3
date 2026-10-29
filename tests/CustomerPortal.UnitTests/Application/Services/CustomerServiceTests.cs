@@ -6,9 +6,9 @@ using CustomerPortal.Domain;
 
 namespace CustomerPortal.UnitTests.Application.Services;
 
-public class CustomerServiceTest
+public class CustomerServiceTests
 {
-    class MockCustomerRepository(bool success) : ICustomerRepository
+    class FakeCustomerRepository(bool success) : ICustomerRepository
     {
         public Customer? Get(int id)
         {
@@ -38,14 +38,14 @@ public class CustomerServiceTest
     [InlineData("", "Smith", "Baker Street")]
     [InlineData("John", null, "Baker Street")]
     [InlineData("John", "Smith", null)]
-    public void CreateCustomer_InvalidRequest_ReturnValidationFalied(
+    public void CreateCustomer_InvalidRequest_ReturnsValidationFailed(
         string? surname,
         string? forename,
         string? address
     )
     {
         // Arrange
-        var customerService = new CustomerService(new MockCustomerRepository(false));
+        var customerService = new CustomerService(new FakeCustomerRepository(false));
         var request = new CreateCustomerRequest(surname!, forename!, address!);
 
         // Act
@@ -56,10 +56,10 @@ public class CustomerServiceTest
     }
 
     [Fact]
-    public void CreateCustomer_DuplicateCustomer_ReturnAlreadyExists()
+    public void CreateCustomer_DuplicateCustomer_ReturnsAlreadyExists()
     {
         // Arrange
-        var customerService = new CustomerService(new MockCustomerRepository(false));
+        var customerService = new CustomerService(new FakeCustomerRepository(false));
         var request = new CreateCustomerRequest("Brown", "James", "Funky Town");
 
         // Act
@@ -70,10 +70,10 @@ public class CustomerServiceTest
     }
 
     [Fact]
-    public void CreateCustomer_ValidRequest_ReturnSuccess()
+    public void CreateCustomer_ValidRequest_ReturnsSuccess()
     {
         // Arrange
-        var customerService = new CustomerService(new MockCustomerRepository(true));
+        var customerService = new CustomerService(new FakeCustomerRepository(true));
         var request = new CreateCustomerRequest("Brown", "James", "Funky Town");
 
         // Act

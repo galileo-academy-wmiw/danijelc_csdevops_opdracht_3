@@ -1,4 +1,4 @@
-﻿namespace CustomerPortal.Domain;
+namespace CustomerPortal.Domain;
 
 public class Customer(int id, string surname, string forename, decimal discount, string address)
 {

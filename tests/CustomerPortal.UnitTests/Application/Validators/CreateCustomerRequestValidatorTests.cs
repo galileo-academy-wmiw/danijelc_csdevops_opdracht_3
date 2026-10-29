@@ -1,4 +1,4 @@
-﻿using CustomerPortal.Application.Requests;
+using CustomerPortal.Application.Requests;
 using CustomerPortal.Application.Validators;
 
 namespace CustomerPortal.UnitTests.Application.Validators;
