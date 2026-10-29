@@ -3,7 +3,7 @@ using CustomerPortal.Application.Repositories;
 namespace CustomerPortal.UnitTests.Application.Repositories;
 
 public class InMemoryCustomerRepositoryTests
-{
+ {
     [Fact]
     public void NextId_FirstCall_ReturnsOne()
     {

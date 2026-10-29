@@ -13,7 +13,7 @@ public enum Status
     Success,
     ValidationFailed,
     NotFound,
-    SaveFailed,
+    AlreadyExists,
 }
 
 public record CustomerResponse(Status Status, List<CustomerData> Customers, Error? Error);

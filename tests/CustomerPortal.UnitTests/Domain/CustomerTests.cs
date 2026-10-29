@@ -51,16 +51,19 @@ public class CustomerTests
     }
 
     [Theory]
-    [InlineData("", "", "")]
-    [InlineData("  ", "   ", "   ")]
-    [InlineData("John", "", "")]
+    [InlineData(null, "Smith", "Baker Street")]
+    [InlineData("John", "", "Baker Street")]
     [InlineData("John", "Smith", " ")]
-    public void New_Customer_EmptyOrWhiteSpaceValue_ThrowsArgumentException(
-        string surname,
-        string forename,
-        string address
+    [InlineData("", "Smith", "Baker Street")]
+    [InlineData("John", null, "Baker Street")]
+    [InlineData("John", "Smith", null)]
+    public void Constructor_EmptyOrWhiteSpaceValue_ThrowsArgumentException(
+        string? surname,
+        string? forename,
+        string? address
     )
     {
+        // Assert
         Assert.Throws<ArgumentException>(() =>
             // Act
             new Customer(1, surname, forename, address)
@@ -96,9 +99,9 @@ public class CustomerTests
     }
 
     [Fact]
-    public void New_Customer_NegativeDiscount_StoresZero()
+    public void Constructor_NegativeDiscount_StoresZero()
     {
-        // Arrange
+        // Act
         var customer = new Customer(1, "Connery", "Sean", -10m, "Scotland");
 
         // Assert

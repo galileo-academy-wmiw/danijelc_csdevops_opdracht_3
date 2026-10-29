@@ -75,7 +75,7 @@ public class CustomerService(ICustomerRepository repository)
         if (!success)
         {
             return new CustomerResponse(
-                Status.SaveFailed,
+                Status.AlreadyExists,
                 [],
                 new Error($"Customer with id {customer.Id} already exists")
             );

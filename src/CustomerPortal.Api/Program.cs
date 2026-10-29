@@ -29,7 +29,7 @@ app.MapGet(
     {
         var customerResponse = customerService.GetCustomer(id);
 
-        if (customerResponse.Status is Status.NotFound)
+        if (customerResponse.Status == Status.NotFound)
         {
             return Results.NotFound();
         }
@@ -51,12 +51,12 @@ app.MapPost(
     {
         var customerResponse = customerService.CreateCustomer(request);
 
-        if (customerResponse.Status is Status.ValidationFailed)
+        if (customerResponse.Status == Status.ValidationFailed)
         {
             return Results.BadRequest(customerResponse.Error);
         }
 
-        if (customerResponse.Status == Status.SaveFailed)
+        if (customerResponse.Status == Status.AlreadyExists)
         {
             return Results.Conflict(customerResponse.Error);
         }

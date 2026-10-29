@@ -6,7 +6,7 @@ namespace CustomerPortal.Application.Repositories;
 public class InMemoryCustomerRepository : ICustomerRepository
 {
     private int _nextId = 0;
-    private readonly ConcurrentDictionary<int, Customer> customers = [];
+    private readonly ConcurrentDictionary<int, Customer> _customers = [];
 
     public int NextId()
     {
@@ -15,23 +15,18 @@ public class InMemoryCustomerRepository : ICustomerRepository
 
     public IReadOnlyList<Customer> GetAll()
     {
-        var orderedCustomers = customers.OrderBy(pair => pair.Key).Select(pair => pair.Value);
+        var orderedCustomers = _customers.OrderBy(pair => pair.Key).Select(pair => pair.Value);
         return [.. orderedCustomers];
     }
 
     public Customer? Get(int id)
     {
-        if (id < 1)
-        {
-            return null;
-        }
-
-        customers.TryGetValue(id, out Customer? customer);
+        _customers.TryGetValue(id, out Customer? customer);
         return customer;
     }
 
     public bool Save(Customer customer)
     {
-        return customers.TryAdd(customer.Id, customer);
+        return _customers.TryAdd(customer.Id, customer);
     }
 }
