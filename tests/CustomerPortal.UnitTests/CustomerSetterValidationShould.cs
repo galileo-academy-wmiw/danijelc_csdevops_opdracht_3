@@ -26,11 +26,11 @@ public class CustomerSetterValidationShould
         string testValue
     )
     {
-        //Arrange
-        var customer = new Customer(1, "Bourne", "Jason", "France") { };
+        // Arrange
+        var customer = new Customer(1, "Bourne", "Jason", "France");
 
         var ex = Assert.Throws<ArgumentException>(() =>
-            //Act
+            // Act
             testProperty(customer, testValue)
         );
 
@@ -48,7 +48,7 @@ public class CustomerSetterValidationShould
     )
     {
         // Arrange
-        var customer = new Customer(1, "Bourne", "Jason", "France") { };
+        var customer = new Customer(1, "Bourne", "Jason", "France");
 
         // Act
         testProperty(customer, "newValue");
