@@ -1,16 +1,16 @@
 ﻿using CustomerPortal.Application.Requests;
 using CustomerPortal.Application.Validators;
 
-namespace CustomerPortal.UnitTests;
+namespace CustomerPortal.UnitTests.Application.Validators;
 
-public class CreateCustomerRequestValidatorShould
+public class CreateCustomerRequestValidatorTests
 {
     [Theory]
     [InlineData("", "", "")]
     [InlineData("  ", "   ", "   ")]
     [InlineData("John", "", "")]
     [InlineData("John", "Smith", " ")]
-    public void Validator_SurnameForenameAddress_EmptyOrWhiteSpaces_ReturnsFalse(
+    public void Validate_EmptyOrWhitespaceField_IsNotValid(
         string surname,
         string forename,
         string address
@@ -28,7 +28,7 @@ public class CreateCustomerRequestValidatorShould
     }
 
     [Fact]
-    public void Validator_SurnameForenameAddressNotEmptyStringOrWhiteSpace_ReturnsTrue()
+    public void Validate_AllFieldsFilled_IsValid()
     {
         // Arrange
         var request = new CreateCustomerRequest("Bond", "James", "Top Secret!");
