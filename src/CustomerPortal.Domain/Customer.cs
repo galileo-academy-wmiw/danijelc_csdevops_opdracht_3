@@ -9,13 +9,13 @@ public class Customer(int id, string surname, string forename, decimal discount,
     public string Surname
     {
         get;
-        set { Validate(value, nameof(Surname)); }
+        set => field = Validate(value, nameof(Surname));
     } = Validate(surname, nameof(surname));
 
     public string Forename
     {
         get;
-        set { Validate(value, nameof(Forename)); }
+        set => field = Validate(value, nameof(Forename));
     } = Validate(forename, nameof(forename));
 
     public decimal Discount { get; private set; } =
@@ -23,7 +23,11 @@ public class Customer(int id, string surname, string forename, decimal discount,
             ? throw new ArgumentException($"Invalid discount value: {discount}")
             : discount;
 
-    public string Address { get; set; } = Validate(address, nameof(address));
+    public string Address
+    {
+        get;
+        set => field = Validate(value, nameof(Address));
+    } = Validate(address, nameof(address));
 
     internal void SetDiscount(decimal discount)
     {
