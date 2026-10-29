@@ -2,12 +2,12 @@ using CustomerPortal.Domain;
 
 namespace CustomerPortal.Application.Responses;
 
-public record CustomerData(Customer Customer)
+public class CustomerData(Customer customer)
 {
-    public int Id = Customer.Id;
-    public string Surname = Customer.Surname;
-    public string Forename = Customer.Forename;
-    public decimal Discount = Customer.Discount;
+    public int Id { get; } = customer.Id;
+    public string Surname { get; } = customer.Surname;
+    public string Forename { get; } = customer.Forename;
+    public string Address { get; } = customer.Address;
 }
 
 public enum Status
