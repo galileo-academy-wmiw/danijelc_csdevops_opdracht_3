@@ -66,7 +66,7 @@ public class CustomerTests
         // Assert
         Assert.Throws<ArgumentException>(() =>
             // Act
-            new Customer(1, surname, forename, address)
+            new Customer(1, surname!, forename!, address!)
         );
     }
 

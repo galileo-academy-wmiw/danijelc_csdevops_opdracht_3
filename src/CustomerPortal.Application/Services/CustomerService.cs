@@ -21,18 +21,18 @@ public class CustomerService(ICustomerRepository repository)
         return new Result<IReadOnlyList<CustomerData>>(Status.Success, customersData, null);
     }
 
-    public Result<CustomerData?> GetCustomer(int id)
+    public Result<CustomerData> GetCustomer(int id)
     {
         var customer = repository.Get(id);
         if (customer is null)
         {
-            return new Result<CustomerData?>(Status.NotFound, null, null);
+            return new Result<CustomerData>(Status.NotFound, null, null);
         }
 
-        return new Result<CustomerData?>(Status.Success, new CustomerData(customer), null);
+        return new Result<CustomerData>(Status.Success, new CustomerData(customer), null);
     }
 
-    public Result<CustomerData?> CreateCustomer(CreateCustomerRequest request)
+    public Result<CustomerData> CreateCustomer(CreateCustomerRequest request)
     {
         // validate request
         var createCustomerRequestValidator = new CreateCustomerRequestValidator();
@@ -40,7 +40,7 @@ public class CustomerService(ICustomerRepository repository)
 
         if (!result.IsValid)
         {
-            return new Result<CustomerData?>(
+            return new Result<CustomerData>(
                 Status.ValidationFailed,
                 null,
                 new Error(result.ToString())
@@ -58,13 +58,13 @@ public class CustomerService(ICustomerRepository repository)
         var success = repository.Save(customer);
         if (!success)
         {
-            return new Result<CustomerData?>(
+            return new Result<CustomerData>(
                 Status.AlreadyExists,
                 null,
                 new Error($"Customer with id {customer.Id} already exists")
             );
         }
 
-        return new Result<CustomerData?>(Status.Success, new CustomerData(customer), null);
+        return new Result<CustomerData>(Status.Success, new CustomerData(customer), null);
     }
 }
