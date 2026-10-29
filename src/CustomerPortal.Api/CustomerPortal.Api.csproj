@@ -14,5 +14,4 @@
     <ProjectReference Include="..\CustomerPortal.Application\CustomerPortal.Application.csproj" />
   </ItemGroup>
 
-
 </Project>
